@@ -1,0 +1,101 @@
+# CodeRabbit Configuration for AI Forensic Engine
+# https://docs.coderabbit.ai/guides/configure-coderabbit
+
+language: "en-US"
+early_access: false
+
+reviews:
+  profile: "assertive"  # Be thorough with security-critical code
+  request_changes_workflow: true
+  high_level_summary: true
+  poem: false
+  review_status: true
+  collapse_walkthrough: false
+  
+  auto_review:
+    enabled: true
+    drafts: false
+    base_branches:
+      - main
+      - develop
+  
+  # Ignore certain paths
+  path_filters:
+    - "!demo_evidence/**"
+    - "!temp/**"
+    - "!reports/**"
+    - "!*.md"
+    - "!.gitignore"
+  
+  # Custom instructions per path
+  path_instructions:
+    - path: "main.py"
+      instructions: |
+        This is the FastAPI backend. Focus on:
+        - API security (authentication, authorization, rate limiting)
+        - Input validation and sanitization
+        - CORS configuration
+        - Error handling and logging
+        - Async/await patterns
+        - File upload security
+    
+    - path: "app.py"
+      instructions: |
+        This is the Streamlit frontend. Focus on:
+        - User input validation
+        - Error message security (no sensitive data exposure)
+        - XSS prevention
+        - API communication security
+    
+    - path: "models/**"
+      instructions: |
+        These are ML detection models. Focus on:
+        - Input validation for file paths
+        - Error handling for corrupted files
+        - Resource cleanup (file handles, memory)
+        - Type safety
+    
+    - path: "pipeline/**"
+      instructions: |
+        These are processing pipelines. Focus on:
+        - Data validation at each step
+        - Error propagation
+        - Resource management
+        - Performance optimization
+    
+    - path: "utils/**"
+      instructions: |
+        These are utility functions. Focus on:
+        - Input validation
+        - Edge case handling
+        - Type hints
+        - Documentation
+  
+  tools:
+    shellcheck:
+      enabled: true
+    ruff:
+      enabled: true
+    markdownlint:
+      enabled: true
+    github-checks:
+      enabled: true
+      timeout: 5m
+
+chat:
+  auto_reply: true
+
+# Security-focused review
+tone_instructions: |
+  This is a forensic evidence verification system used in legal proceedings.
+  Security and reliability are CRITICAL. Please be thorough in reviewing:
+  
+  1. Security vulnerabilities (especially file handling)
+  2. Input validation and sanitization
+  3. Error handling and logging
+  4. Performance issues
+  5. Code quality and maintainability
+  
+  Flag any potential security issues as HIGH PRIORITY.
+  Suggest specific code fixes with examples.
+  Reference relevant security standards (OWASP, CWE).
