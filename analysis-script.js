@@ -20,18 +20,34 @@ document.querySelector('.modal').remove();alert('Updated');
 }
 function logout(){var m=document.querySelector('.modal');if(m)m.remove();localStorage.clear();location.href='login.html'}
 window.saveProfile=saveProfile;window.logout=logout;
-var c=document.getElementById('waveform'),ctx=c.getContext('2d');
-function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight;draw()}
+var c=document.getElementById('waveform'),ctx=c.getContext('2d'),particles=[],scanLine=0;
+function resize(){c.width=c.offsetWidth;c.height=c.offsetHeight;}
+function Particle(){this.x=Math.random()*c.width;this.y=Math.random()*c.height;this.vx=(Math.random()-0.5)*2;this.vy=(Math.random()-0.5)*2;this.size=Math.random()*3+1;this.life=Math.random()*100;}
+for(var i=0;i<80;i++)particles.push(new Particle());
 function draw(){
-var w=c.width,h=c.height,cy=h/2;ctx.clearRect(0,0,w,h);
-var bw=3,g=2,n=Math.floor(w/(bw+g));
-for(var i=0;i<n;i++){
-var x=i*(bw+g),a=Math.random()*0.8+0.2,bh=h*0.7*a;
-var gr=ctx.createLinearGradient(0,cy-bh/2,0,cy+bh/2);
-gr.addColorStop(0,'#1e3a5f');gr.addColorStop(0.5,'#3B82F6');gr.addColorStop(1,'#1e3a5f');
-ctx.fillStyle=gr;ctx.fillRect(x,cy-bh/2,bw,bh);
-}}
-window.onresize=resize;resize();setInterval(draw,100);
+var w=c.width,h=c.height;
+ctx.fillStyle='rgba(10,10,10,0.1)';ctx.fillRect(0,0,w,h);
+scanLine+=3;if(scanLine>w)scanLine=0;
+var grad=ctx.createLinearGradient(scanLine-50,0,scanLine+50,0);
+grad.addColorStop(0,'rgba(59,130,246,0)');grad.addColorStop(0.5,'rgba(59,130,246,0.3)');grad.addColorStop(1,'rgba(59,130,246,0)');
+ctx.fillStyle=grad;ctx.fillRect(scanLine-50,0,100,h);
+for(var i=0;i<particles.length;i++){
+var pt=particles[i];
+pt.x+=pt.vx;pt.y+=pt.vy;pt.life--;
+if(pt.x<0||pt.x>w||pt.y<0||pt.y>h||pt.life<0){particles[i]=new Particle();continue;}
+var dist=Math.abs(pt.x-scanLine);
+if(dist<50){
+ctx.fillStyle='rgba(59,130,246,'+(1-dist/50)+')';
+ctx.shadowBlur=15;ctx.shadowColor='#3B82F6';
+}else{
+ctx.fillStyle='rgba(100,150,200,0.5)';
+ctx.shadowBlur=0;
+}
+ctx.beginPath();ctx.arc(pt.x,pt.y,pt.size,0,Math.PI*2);ctx.fill();
+}
+ctx.shadowBlur=0;
+}
+window.onresize=resize;resize();setInterval(draw,30);
 var p=0,f=document.getElementById('fill'),pc=document.getElementById('percent'),s3=document.getElementById('s3'),s4=document.getElementById('s4'),te=document.getElementById('time');
 function upd(){
 if(p<65){p+=Math.random()*2;if(p>65)p=65;f.style.width=p+'%';pc.textContent=Math.floor(p)+'%';

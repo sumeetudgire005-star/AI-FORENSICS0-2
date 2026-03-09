@@ -69,6 +69,10 @@ body.light .logo {
     color: #0f172a;
 }
 
+.logo .ai {
+    color: #3B82F6;
+}
+
 .logo-icon {
     width: 24px;
     height: 24px;

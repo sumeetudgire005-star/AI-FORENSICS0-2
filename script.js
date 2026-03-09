@@ -63,3 +63,4 @@ m.innerHTML='<div class="modal-content"><div class="modal-header"><h3>'+t+'</h3>
 document.body.appendChild(m);
 }
 window.showInfo=showInfo;
+if(navigator.storage&&navigator.storage.estimate){navigator.storage.estimate().then(function(est){var q=est.quota||0,u=est.usage||0,a=q-u;var ss=document.querySelector('.storage-size');if(ss){var gb=a/1024/1024/1024;if(gb>1000){ss.textContent=(gb/1024).toFixed(1)+' TB Available';}else{ss.textContent=gb.toFixed(1)+' GB Available';}}var sb=document.querySelector('.storage-used');if(sb&&q>0){var p=(u/q)*100;sb.style.width=p+'%';}});}

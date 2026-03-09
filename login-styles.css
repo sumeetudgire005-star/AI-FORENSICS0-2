@@ -54,6 +54,10 @@ body::before {
     border-radius: 4px;
 }
 
+.logo .ai {
+    color: #3B82F6;
+}
+
 .ai {
     color: #3B82F6;
 }

@@ -80,6 +80,10 @@ body.light .logo {
     border-radius: 4px;
 }
 
+.logo .ai {
+    color: #3B82F6;
+}
+
 .nav-right {
     display: flex;
     gap: 0.5rem;
